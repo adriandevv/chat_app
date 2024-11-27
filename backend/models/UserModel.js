@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+import { genSalt } from "bcrypt";
+import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -34,7 +35,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  const salt = await getSalt();
+  const salt = await genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
