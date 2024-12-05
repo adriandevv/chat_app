@@ -22,10 +22,11 @@ export const singup = async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "User already exists" });
     }
-
-    res.cookie("jwt", createToken(User.email,User._id), {
+console.log(user);
+    res.cookie("jwt", createToken(user.email,user._id), {
       maxAge: maxAge,
-      sameSite: "none",
+      httpOnly: true,
+      secure:true
     });
     res.status(201).json({
       user: {
@@ -60,12 +61,14 @@ export const login = async (req, res) => {
     if (!auth) {
       return res.status(400).json({ error: "User email or password is incorrect" });
     }
-
+    console.log(user);
     const token = createToken(user.email, user._id);
 
     res.cookie("jwt", token, {
       maxAge: maxAge,
       sameSite: "none",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
     });
     res.status(200).json({
       user: {
@@ -83,3 +86,34 @@ export const login = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getUSerInfo = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const user = await User.findById(decodedToken.userId);
+      res.status(200).json({
+        user: {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          image: user.Image,
+          color: user.color,
+          profileSetup: user.profileSetup,
+        },
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: error });
+    console.log(error);
+  }
+}

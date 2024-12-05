@@ -71,6 +71,7 @@ const Auth = () => {
 
             console.log(login.user);
             if (login?.user.profileSetup) {
+              console.log(login.user);
               setUserInfo(login.user);
                 navigate("/chat");
             } else {
