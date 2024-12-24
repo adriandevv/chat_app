@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 
 export const useUserInfo = () => {
     const [loading, setLoading] = useState(true);
-    const { userInfo } = useAppStore();
+    const { userInfo, setUserInfo } = useAppStore();
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const response = await fetch(GET_USER_INFO, {
-                    credentials: 'include',
+                       credentials: 'include'
                 });
                 const data = await response.json();
-                useAppStore.setState({ userInfo: data });
+
+                setUserInfo(data.user);
             } catch (error) {
+                setUserInfo(undefined);
                 console.log(error);
+            }
+            finally {
+                setLoading(false);
             }
         }
 
@@ -25,7 +30,7 @@ export const useUserInfo = () => {
             setLoading(false);
         }
     }
-        , [userInfo]);
+        , [userInfo, setUserInfo]);
 
         return { userInfo, loading };
     

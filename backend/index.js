@@ -17,13 +17,17 @@ app.listen(port, () => {
 );
 
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+    origin: 'http://127.0.0.1:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true
 }));
 
+app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+
+
 
 
 mongoose.connect(databaseUrl ).then(() => {

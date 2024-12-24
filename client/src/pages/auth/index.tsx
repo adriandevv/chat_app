@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import  {SINGUP_ROUTE , LOGIN_ROUTE} from "@/utils/constantes"; // Replace with the actual route if different
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "@/store";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 
 const Auth = () => {
@@ -16,6 +17,8 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const {loading} = useUserInfo();
+ 
 
   const validateLogin = () => {
     if (!email.length) {
@@ -53,8 +56,9 @@ const Auth = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    credentials: "include",
+                
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     email,
                     password,
@@ -91,8 +95,9 @@ const Auth = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          credentials: 'include'
+          
         },
+        credentials: 'include',
         body: JSON.stringify({
           email,
           password,
@@ -104,6 +109,11 @@ const Auth = () => {
       console.log(response);
     }
   };
+
+  if(loading){
+    return <div>Cargando...</div>
+   }
+
   return (
     <div className="w-[100vw] h-[100vh] flex justify-center items-center">
       <div className=" w-[80vw] h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid md:grid-cols-2 ">
