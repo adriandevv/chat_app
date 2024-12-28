@@ -1,4 +1,4 @@
-import { ADD_PROFILE_IMAGE_ROUTE, DELETE_PROFILE_IMAGE_ROUTE } from "@/utils/constantes";
+import { ADD_PROFILE_IMAGE_ROUTE, DELETE_PROFILE_IMAGE_ROUTE, LOGOUT_ROUTE } from "@/utils/constantes";
 
 export const UpdateImage = async (image : FormData) => {
     try {
@@ -32,6 +32,23 @@ export const UpdateImage = async (image : FormData) => {
       }
 
       return result.user.image;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+ export  const logout = async () => {
+    try {
+      const response = await fetch(LOGOUT_ROUTE, {
+        method: "GET",
+        credentials: "include", // Incluir cookies en la solicitud
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error("Ocurrió un error desconocido");
+      }
+
+      return result;
     } catch (error) {
       throw error;
     }

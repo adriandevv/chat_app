@@ -69,7 +69,8 @@ export const login = async (req, res) => {
     console.log(user);
     const token = createToken(user.email, user._id);
 
-    res.cookie("jwt", token, {
+    res.cookie("jwt", token, { 
+      maxAge: maxAge,
       httpOnly: true, // Mayor seguridad para que no sea accesible desde JS
       secure: false, // Cambiar a true en producción con HTTPS
       sameSite: "Lax", // Permitir envío de cookies en navegación de origen cruzado
@@ -197,10 +198,23 @@ export const deleteProfileImage = async (req, res) => {
         image: user.Image,
       },
     });
-
-    return res.status(200).json({ mensaje: "Profile image deleted successfully." });
   } catch (error) {
     res.status(500).json({ mensaje: error });
     console.log(error);
   }
 };
+
+export const logout = async (req, res) => {
+try {
+  res.cookie("jwt", "", { 
+    maxAge: 1,
+    httpOnly: true, // Mayor seguridad para que no sea accesible desde JS
+    secure: false, // Cambiar a true en producción con HTTPS
+    sameSite: "Lax", // Permitir envío de cookies en navegación de origen cruzado
+  });
+  res.status(200).json({ mensaje: "Logout successful" });
+  
+} catch (error) {
+  res.status(500).send("Internal server error");
+}
+}

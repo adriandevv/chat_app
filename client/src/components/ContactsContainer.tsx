@@ -1,4 +1,5 @@
 import { Logo } from "./Logo";
+import { ProfileInfo } from "./ProfileInfo";
 
 export const ContactsContainer = () => {
   return (
@@ -16,7 +17,7 @@ export const ContactsContainer = () => {
           <Title text="Canales"/>
         </div>
       </div>
-      
+      <ProfileInfo/>
     </div>
   );
 };
