@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRouter.js';
+import contactRoutes from './routes/ContactRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -26,7 +27,7 @@ app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
-
+app.use("/api/contacts", contactRoutes);
 
 
 

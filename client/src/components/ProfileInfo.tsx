@@ -1,6 +1,5 @@
 import { useProfileInfo } from "@/hooks/useProfileInfo";
 import { getColor } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
     Tooltip,
     TooltipContent,
@@ -12,16 +11,21 @@ import { useNavigate } from "react-router-dom";
 import {  IoPowerSharp } from "react-icons/io5"; 
 import { logout as  apiLogout } from "@/api/profile";
 import { useAppStore } from "@/store";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export const ProfileInfo = () => {
-  const { setUserInfo } = useAppStore();
+  const { setUserInfo, closeChat} = useAppStore();
     const { firstName, lastName, image, selectedColor } = useProfileInfo();
   const navigate = useNavigate();
   const logOut = async () => {
    const res = await apiLogout();
-   if(res.message === "Logout successful"){
+   console.log(res);
+   if(res.mensaje){
     navigate("/auth");
-    setUserInfo(undefined);   
+    if (setUserInfo && closeChat) {
+      setUserInfo(undefined);
+      closeChat();
+    }
 }
   }
 

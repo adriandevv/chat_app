@@ -29,5 +29,7 @@ export const animationDefaultOptions = {
 loop:true,
 autoplay:true,
 animationData:animationData,
-
+rendererSettings: {
+  preserveAspectRatio: "xMidYMid slice",
+},
 }

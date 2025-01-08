@@ -1,4 +1,6 @@
-interface UserInfo {
+import { AuthSlice } from "../index.ts";
+
+export interface UserInfo {
     id: string;
     email: string;
     firstName: string;
@@ -8,10 +10,7 @@ interface UserInfo {
     profileSetup: boolean;
 }
 
-export interface AuthSlice {
-    userInfo: UserInfo | undefined;
-    setUserInfo: (userInfo: UserInfo | undefined) => void;
-}
+
 
 export const createAuthSlice = (set: (partial: Partial<AuthSlice>) => void): AuthSlice => ({
     userInfo: undefined,
