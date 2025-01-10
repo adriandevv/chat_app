@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRouter.js';
 import contactRoutes from './routes/ContactRoutes.js';
+import { setupSocket } from './socket.js';
 dotenv.config();
 
 const app = express();
@@ -12,10 +13,6 @@ const port = process.env.PORT || 5000;
 const databaseUrl = process.env.DATABASE_URL;
 
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
-    }
-);
 
 app.use(cors({
     origin: 'http://127.0.0.1:5173',
@@ -29,7 +26,11 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactRoutes);
 
-
+const server = app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+    }
+);
+setupSocket(server);
 
 mongoose.connect(databaseUrl ).then(() => {
     console.log('Connected to database');
