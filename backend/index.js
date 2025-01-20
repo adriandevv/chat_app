@@ -15,7 +15,7 @@ const databaseUrl = process.env.DATABASE_URL;
 
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5173',
+    origin: ["http://127.0.0.1:5173", "http://localhost:5173"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true
 }));
@@ -28,11 +28,11 @@ app.use("/api/contacts", contactRoutes);
 
 const server = app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
-    }
+}
 );
 setupSocket(server);
 
-mongoose.connect(databaseUrl ).then(() => {
+mongoose.connect(databaseUrl).then(() => {
     console.log('Connected to database');
 }
 ).catch((error) => {
