@@ -4,9 +4,11 @@ import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import { toast } from "sonner";
 import  EmojiPicker, { EmojiStyle }  from "emoji-picker-react";
+import { useAppStore } from "@/store";
 
 export const MessageBar = () => {
   const emojiRef = useRef<HTMLDivElement>(null);
+  const {selectedChatType, selectedChatData} = useAppStore();
   const [message, setMessage] = useState<string>("");
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
 
@@ -29,6 +31,8 @@ export const MessageBar = () => {
     setMessage((prev) => prev + emoji);
   };
   const handleSendMessage = async () => {
+if(){}
+
     toast.success("Mensaje enviado");
   };
 

@@ -14,6 +14,7 @@ export interface AuthSlice {
     setSelectedChatData?: (selectedChatData: any) => void;
     setSelectedChatMessages?: (selectedChatMessages: any) => void;
     closeChat?: () => void;
+    addMessage?: (message: any) => void;
 }
 
 export const useAppStore = create<AuthSlice>((set) => ({
