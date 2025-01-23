@@ -17,7 +17,7 @@ export interface AuthSlice {
     addMessage?: (message: any) => void;
 }
 
-export const useAppStore = create<AuthSlice>((set) => ({
+export const useAppStore = create<AuthSlice>((set,get) => ({
     ...createAuthSlice(set),
-    ...createChatSlice(set),
+    ...createChatSlice(set,get),
   }));

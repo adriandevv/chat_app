@@ -5,12 +5,15 @@ import { RiEmojiStickerLine } from "react-icons/ri";
 import { toast } from "sonner";
 import  EmojiPicker, { EmojiStyle }  from "emoji-picker-react";
 import { useAppStore } from "@/store";
+import { useSocket } from "@/context/SocketContext";
+
 
 export const MessageBar = () => {
   const emojiRef = useRef<HTMLDivElement>(null);
-  const {selectedChatType, selectedChatData} = useAppStore();
+  const {selectedChatType, selectedChatData, userInfo} = useAppStore();
   const [message, setMessage] = useState<string>("");
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
+  const socket = useSocket();
 
   useEffect(() => {
      function handleClickOutside(event: MouseEvent) {
@@ -31,8 +34,18 @@ export const MessageBar = () => {
     setMessage((prev) => prev + emoji);
   };
   const handleSendMessage = async () => {
-if(){}
+    if(selectedChatType ==="contact" ){
+      if(userInfo?.id){
+        socket.emit("sendMessage", {
+          sender: userInfo.id,
+          messageContent: message,
+          recipient: selectedChatData._id,
+          messageType: "text",
+          fileUrl:undefined
+        });
 
+      }
+    }
     toast.success("Mensaje enviado");
   };
 

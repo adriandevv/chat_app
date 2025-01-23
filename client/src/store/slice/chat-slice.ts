@@ -10,8 +10,9 @@ interface ChatSlice {
 }
 
 export const createChatSlice = (
-  set: (partial: Partial<ChatSlice>) => void
-): ChatSlice => ({
+  set,
+  get
+) => ({
   selectedChatType: "",
   selectedChatData: "",
   selectedChatMessages: [],

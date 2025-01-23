@@ -13,12 +13,17 @@ export const setupSocket = (server) => {
   const sendMessage = async (data) => {
     const senderSocketId = userSocketMap.get(data.sender);
     const recipientSocketId = userSocketMap.get(data.recipient);
-    const createdMessage = await Message.create(data);
-    const messageData = await
-      Message
-        .findById(createdMessage._id)
-        .populate('sender', "id email firstName image color")
-        .populate('recipient', "id email firstName image color");
+    console.log(data);
+    const createdMessage = await Message.create({
+      sender: data.sender,
+      recipient: data.recipient,
+      messageType: data.messageType,
+      messageContent: data.messageContent,
+      fileUrl: data.fileUrl || undefined,
+    });
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id email firstName image color")
+      .populate("recipient", "id email firstName image color");
 
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("recieveMessage", messageData);
@@ -48,9 +53,7 @@ export const setupSocket = (server) => {
     } else {
       console.log("User ID not provided during connection");
     }
-    socket.on("sendMessage", sendMessage)
+    socket.on("sendMessage", sendMessage);
     socket.on("disconnect", disconnect);
   });
-
-
 };

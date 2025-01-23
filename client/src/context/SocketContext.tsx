@@ -16,38 +16,38 @@ interface SocketProviderProps {
 export const SocketProvider = ({
   children,
 }: SocketProviderProps): JSX.Element => {
-    const socket = useRef<Socket | null>(null);
-    
-    const { userInfo } = useAppStore();
-    
-    useEffect(() => {
-        if (userInfo) {
-            socket.current = io(HOST, {
-                withCredentials: true,
-                query: {
-                    userId: userInfo.id,
-                },
-            });
-            
-            socket.current.on("connect", () => {
-                console.log("Connected to socket server");
-            });
-        }
-        
-        const handleRecieveMessage = (message: any) => {
-        const { selectedChatData, selectedChatType,addMessage } = useAppStore.getState();
+  const socket = useRef<Socket | null>(null);
+
+  const { userInfo } = useAppStore();
+
+  useEffect(() => {
+    if (userInfo) {
+      socket.current = io(HOST, {
+        withCredentials: true,
+        query: {
+          userId: userInfo.id,
+        },
+      });
+
+      socket.current.on("connect", () => {
+        console.log("Connected to socket server");
+      });
+    }
+
+    const handleRecieveMessage = (message: any) => {
+      const { selectedChatData, selectedChatType, addMessage } =
+        useAppStore.getState();
       if (
         (selectedChatType !== undefined &&
           selectedChatData._id === message.sender._id) ||
         selectedChatData._id === message.recipient._id
       ) {
-        if(addMessage){
-          addMessage(message);
-        }
+        console.log("Mensaje Recibido:", message);
+        addMessage(message);
       }
     };
 
-    socket.current?.on("recievedMessage", handleRecieveMessage);
+    socket.current?.on("recieveMessage", handleRecieveMessage);
 
     return () => {
       if (socket.current) {
