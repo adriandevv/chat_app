@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRouter.js';
 import contactRoutes from './routes/ContactRoutes.js';
 import { setupSocket } from './socket.js';
+import messagesRoutes from './routes/MessagesRouter.js';
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactRoutes);
+app.use("/api/messages", messagesRoutes);
 
 const server = app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
