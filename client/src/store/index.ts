@@ -10,11 +10,13 @@ export interface AuthSlice {
     selectedChatType?: any;
     selectedChatData?: any;
     selectedChatMessages?: any[];
+    directMessagesContacts?: any[];
     setSelectedChatType?: (chatType: string |  undefined ) => void;
     setSelectedChatData?: (selectedChatData: any) => void;
     setSelectedChatMessages?: (selectedChatMessages: any) => void;
     closeChat?: () => void;
     addMessage?: (message: any) => void;
+    setDirectMessagesContacts?: (directMessagesContacts: any[]) => void;
 }
 
 export const useAppStore = create<AuthSlice>((set,get) => ({

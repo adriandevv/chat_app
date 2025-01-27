@@ -3,12 +3,17 @@ import { Logo } from "./Logo";
 import { NewDM } from "./NewDM";
 import { ProfileInfo } from "./ProfileInfo";
 import { getDMContacts } from "@/api/contacts";
-export const ContactsContainer = () => {
+import { useAppStore } from "@/store";
+import { ContactList } from "@/components/ContactList.jsx";
 
+export const ContactsContainer = () => {
+const {setDirectMessagesContacts, directMessagesContacts} = useAppStore();
   useEffect(() => {
     async function fetchData (){
       const res = await getDMContacts();
       console.log("CONTACTS CONTAINER:",res);
+      if(setDirectMessagesContacts)setDirectMessagesContacts(res.contacts);
+      
     }
     fetchData();
   }, []);
@@ -24,6 +29,9 @@ export const ContactsContainer = () => {
         <div className="flex items-center justify-between pr-10">
           <Title text="Mensajes directos"/>
           <NewDM/>
+        </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hide">
+          <ContactList contacts={directMessagesContacts}/>
         </div>
       </div>
       <div className="my-5">
