@@ -1,32 +1,53 @@
 import { useAppStore } from "@/store";
 import { useEffect, useRef } from "react";
 import moment from "moment";
+import { getMessages } from "@/api/messages";
 
 export const MessageContainer = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { selectedChatType, selectedChatData, userInfo, selectedChatMessages } =
-    useAppStore();
+  const {
+    selectedChatType,
+    selectedChatData,
+    userInfo,
+    selectedChatMessages,
+    setSelectedChatMessages,
+  } = useAppStore();
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedChatData._id) return;
+      if (selectedChatType !== "contact") return;
+      const res = await getMessages(selectedChatData._id);
+     
+        if (setSelectedChatMessages) {
+          setSelectedChatMessages(res);
+        }
+        console.log("salida res:",res);
+
+    };
+    fetchMessages();
+  }, [selectedChatData, selectedChatType]);
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      scrollRef.current.scrollIntoView({ behavior:"smooth"});
     }
     // return () => {
 
     // }
-  }, [selectedChatMessages]);
+  }, [selectedChatMessages]); 
 
   const renderMessages = () => {
-    let lastDate = null;
+    let lastDate: string | null = null;
     return selectedChatMessages?.map((message) => {
-      const messageDate = moment(message.timesatmp).format("YYYY/MM/DD");
+      const messageDate = moment(message.timestamp).format("YYYY/MM/DD");
       const showDate = lastDate !== messageDate;
       lastDate = messageDate;
       return (
         <div key={message._id}>
           {showDate && (
             <div className="text-center text-gray-500 my-2">
-              {moment(message.timesatmp).format("YYYY/MM/DD")}
+              {moment(message.timestamp).format("YYYY/MM/DD")}
             </div>
           )}
           {selectedChatType === "contact" && renderDMMessage(message)}
@@ -40,9 +61,8 @@ export const MessageContainer = () => {
     sender: string;
     messageType: string;
     messageContent: string;
-    timesatmp: string;
+    timestamp: string;
   }
-
 
   const renderDMMessage = (message: Message) => {
     return (
@@ -59,17 +79,17 @@ export const MessageContainer = () => {
                 : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
           >
-            {message.messageContent}  
+            {message.messageContent}
           </div>
         )}
         <div className="text-xs text-gray-600">
-          {moment(message.timesatmp).format("LT")}
+          {moment(message.timestamp).format("LT")}
         </div>
       </div>
     );
   };
   return (
-    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
+    <div className="flex-1 overflow-y-scroll scrollbar-hide p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
       {renderMessages()}
       <div ref={scrollRef} />
     </div>

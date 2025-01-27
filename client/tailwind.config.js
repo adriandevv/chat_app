@@ -52,7 +52,7 @@ export default {
     		}
     	}
     },
-      plugins: [require("tailwindcss-animate")],
+      plugins: [require("tailwindcss-animate"),require("tailwind-scrollbar-hide")],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
 
 }
