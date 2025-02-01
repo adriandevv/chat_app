@@ -1,4 +1,6 @@
+import { request } from "express";
 import Messages from "../models/MessagesModel.js";
+import { mkdirSync, renameSync } from "fs";
 
 export const getMessages = async (req, res) => {
 try {
@@ -28,4 +30,20 @@ try {
     res.status(500).json({ message: "Server Error" });
 }
 
+}
+
+export const uploadFile = async (req,res,next) =>{
+    try {
+        if(!request.file){
+            return res.status(400).json({message: "File is required"});
+        }
+        const date = new Date.now();
+        let fileDir = `uploads/files/${date}`;
+        let fileName = `${fileName}/${request.file.originalname}`;
+
+        mkdirSync(fileDir, {recursive: true});
+        renameSync(req.file.path, fileName);
+    } catch (error) {
+        
+    }
 }
