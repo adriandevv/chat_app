@@ -1,4 +1,4 @@
-import { GET_ALL_MESSAGES_ROUTE, UPlOAD_FILE_ROUTE } from "@/utils/constantes";
+import { GET_ALL_MESSAGES_ROUTE, HOST, UPlOAD_FILE_ROUTE } from "@/utils/constantes";
 
 export const getMessages = async (id: string) => {
   try {
@@ -40,4 +40,21 @@ export const uploadMessageFile = async (File: FormData) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const downloadFile = async (fileUrl: string) => {
+  try {
+    const response = await fetch(`${HOST}/${fileUrl}`, {
+      method: "GET",
+      credentials: "include",
+    });
+    const result = await response.blob();
+    if (!response.ok) {
+      throw new Error("Ocurrió un error desconocido");
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+
 };
