@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Chat = () => {
-  const { userInfo, selectedChatType } = useAppStore();
+  const { userInfo, selectedChatType, selectedChatData } = useAppStore();
   const navigate = useNavigate();
+  console.log("selectedChatData", selectedChatData);
 
   useEffect(() => {
     if (!userInfo?.profileSetup) {
@@ -21,11 +22,7 @@ const Chat = () => {
     <div className="flex h-[100vh] text-white overflow-hidden">
       <ContactsContainer />
 
-      {
-        selectedChatType ===undefined ?
-        <EmptyChatContainer />: <ChatContainer />
-
-      }
+      {selectedChatData === "" ? <EmptyChatContainer /> : <ChatContainer />}
     </div>
   );
 };
