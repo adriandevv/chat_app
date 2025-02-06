@@ -1,4 +1,4 @@
-import { GET_DM_CONTACTS_ROUTE, SEARCH_CONTACTS_ROUTE } from "@/utils/constantes";
+import { GET_ALL_CONTACTS_ROUTE, GET_DM_CONTACTS_ROUTE, SEARCH_CONTACTS_ROUTE } from "@/utils/constantes";
 
  export  const getContacts = async (searchTerm : string) => {
   console.log(searchTerm);
@@ -38,3 +38,21 @@ export const getDMContacts = async () => {
     throw error;
   }
 };
+
+
+export const getAllContacts = async () => {
+  try {
+    const response = await fetch(GET_ALL_CONTACTS_ROUTE, {
+      method: "GET",
+      credentials: "include",
+    }); 
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error("Ocurrió un error desconocido");
+    }
+    return result;
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+  }
+
+}

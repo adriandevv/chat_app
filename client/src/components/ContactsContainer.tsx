@@ -4,16 +4,16 @@ import { NewDM } from "./NewDM";
 import { ProfileInfo } from "./ProfileInfo";
 import { getDMContacts } from "@/api/contacts";
 import { useAppStore } from "@/store";
-import { ContactList } from "@/components/ContactList.jsx";
+import { ContactList } from "@/components/ContactList.tsx";
+import { CreateChannel } from "@/components/CreateChannel.tsx";
+
 
 export const ContactsContainer = () => {
 const {setDirectMessagesContacts, directMessagesContacts} = useAppStore();
   useEffect(() => {
     async function fetchData (){
       const res = await getDMContacts();
-      console.log("CONTACTS CONTAINER:",res);
-      if(setDirectMessagesContacts)setDirectMessagesContacts(res.contacts);
-      
+      if(setDirectMessagesContacts)setDirectMessagesContacts(res.contacts);     
     }
     fetchData();
   }, []);
@@ -37,6 +37,7 @@ const {setDirectMessagesContacts, directMessagesContacts} = useAppStore();
       <div className="my-5">
         <div className="flex items-center justify-between pr-10">
           <Title text="Canales"/>
+          <CreateChannel/>
         </div>
       </div>
       <ProfileInfo/>
