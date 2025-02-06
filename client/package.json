@@ -21,6 +21,7 @@
     "@radix-ui/react-tooltip": "^1.1.7",
     "@types/react-lottie": "^1.2.10",
     "@uidotdev/usehooks": "^2.4.1",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "emoji-picker-react": "^4.12.0",

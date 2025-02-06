@@ -18,7 +18,7 @@ export const MessageContainer = () => {
     selectedChatData,
     userInfo,
     selectedChatMessages,
-    setSelectedChatMessages,
+    setSelectedChatMessages
   } = useAppStore();
 
   useEffect(() => {
@@ -117,11 +117,12 @@ export const MessageContainer = () => {
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
           >
             {checkIfImage(message?.fileUrl) ? (
-              <div className="cursor-pointer"
-              onClick={() =>{
-                setShowImage(true)
-                setImageUrl(message.fileUrl)
-              }}
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageUrl(message.fileUrl);
+                }}
               >
                 <img
                   src={`${HOST}/${message.fileUrl}`}
@@ -161,29 +162,29 @@ export const MessageContainer = () => {
           onClick={() => setShowImage(false)}
         >
           <div>
-          <img src={`${HOST}/${imageUrl}` || ""} 
-          className="w-[90vh] h-auto bg-cover "
-          />
+            <img
+              src={`${HOST}/${imageUrl}` || ""}
+              className="w-[90vh] h-auto bg-cover "
+            />
           </div>
           <div className="flex gap-5 fixed top-0 mt-5">
-              <button
+            <button
               className="bg-black/20 rounded-full p-3 text-xl hover:bg-black/50 cursor-pointer transition-all duration-300"
-              onClick={
-               
-                ()=>{downloadFile(imageUrl|| "");
-                }}
-              >
-                <IoMdArrowRoundDown />
-              </button>
-              <button
-              className="bg-black/20 rounded-full p-3 text-xl hover:bg-black/50 cursor-pointer transition-all duration-300"
-              onClick={()=>{
-                setShowImage(false)
-                setImageUrl(null)
+              onClick={() => {
+                downloadFile(imageUrl || "");
               }}
-              >
-                <IoCloseSharp />
-              </button>
+            >
+              <IoMdArrowRoundDown />
+            </button>
+            <button
+              className="bg-black/20 rounded-full p-3 text-xl hover:bg-black/50 cursor-pointer transition-all duration-300"
+              onClick={() => {
+                setShowImage(false);
+                setImageUrl(null);
+              }}
+            >
+              <IoCloseSharp />
+            </button>
           </div>
         </div>
       )}

@@ -11,7 +11,7 @@ import { uploadMessageFile } from "@/api/messages";
 export const MessageBar = () => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { selectedChatType, selectedChatData, userInfo } = useAppStore();
+  const { selectedChatType, selectedChatData, userInfo,  setIsUploadingFile, setFileUploadProgress } = useAppStore();
   const [message, setMessage] = useState<string>("");
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   const socket = useSocket();
@@ -62,7 +62,10 @@ export const MessageBar = () => {
       if (!file) return;
       const formData = new FormData();
       formData.append("File", file);
+      setFileUploadProgress(0)
+      setIsUploadingFile(true);
       const res = await uploadMessageFile(formData);
+      setIsUploadingFile(false);
       if (res.filePath) {
         if (selectedChatType === "contact") {
           if (userInfo?.id) {
@@ -78,6 +81,7 @@ export const MessageBar = () => {
       }
       console.log(res);
     } catch (error) {
+      setIsUploadingFile(false);
       console.log(error);
     }
   };
