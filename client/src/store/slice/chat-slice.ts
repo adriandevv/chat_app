@@ -7,11 +7,14 @@ interface ChatSlice {
   isDownloadingFile: boolean;
   fileUploadProgress: number;
   fileDownloadProgress: number;
+  channels: any[];
+  setChannels: (channels: any[]) => void;
   setSelectedChatType: (selectedChatType: string | undefined) => void;
   setSelectedChatData: (selectedChatData: string) => void;
   setSelectedChatMessages: (selectedChatMessages: any[]) => void;
   setDirectMessagesContacts: (directMessagesContacts: any[]) => void;
   closeChat: () => void;
+  addChannel: (channel: any) => void;
   addMessage: (message: any) => void;
   setIsUploadingFile: (isUploadingFile: boolean) => void;
   setIsDownloadingFile: (isDownloadingFile: boolean) => void;
@@ -31,14 +34,17 @@ export const createChatSlice = (
   isDownloadingFile: false,
   fileUploadProgress: 0,
   fileDownloadProgress: 0,
+  channels:[],
+
+  setChannels: (channels: any[]) => set({ channels }),
+  setSelectedChatType: (selectedChatType: string | undefined) =>
+    set({ selectedChatType }),
   setIsUploadingFile: (isUploadingFile: boolean) => set({ isUploadingFile }),
   setIsDownloadingFile: (isDownloadingFile: boolean) =>
     set({ isDownloadingFile }),
   setFileUploadProgress: (fileUploadProgress: number) => set({ fileUploadProgress }),
   setFileDownloadProgress: (fileDownloadProgress: number) =>
     set({ fileDownloadProgress }),
-  setSelectedChatType: (selectedChatType: string | undefined) =>
-    set({ selectedChatType }),
   setSelectedChatData: (selectedChatData: string) => set({ selectedChatData }),
   setDirectMessagesContacts: (directMessagesContacts: any[]) =>
     set({ directMessagesContacts }),
@@ -50,6 +56,10 @@ export const createChatSlice = (
       selectedChatType: undefined,
       selectedChatMessages: [],
     }),
+    addChannel: (channel: any) => {
+    const channels = get().channels;
+    set({ channels: [...channels, channel] });
+  },
   addMessage: (message: any) => {
     const selectedChatMessages = get().selectedChatMessages;
     const selectedChatType = get().selectedChatType;

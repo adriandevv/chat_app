@@ -12,16 +12,18 @@ export const useProfileInfo = () => {
     const [hovered, setHovered] = useState(false);
     const [selectedColor, setSelectedColor] = useState(userInfo?.color || 1);
     useEffect(() => {
-      if (userInfo?.profileSetup) {
+      if (!userInfo) return; // Evita ejecutar el efecto si userInfo aún no está cargado
+    
+      if (userInfo.profileSetup) {
         setFirstName(userInfo.firstName);
         setLastName(userInfo.lastName);
         setSelectedColor(userInfo.color);
+        
       }
-      if(userInfo?.image) {
+      if (userInfo.image) {
         setImage(`${HOST}/${userInfo.image}`);
       }
-    }
-    , [userInfo]);
+    }, [userInfo]);
 
   return  {firstName, setFirstName, lastName, setLastName, image, setImage, hovered, setHovered, selectedColor, setSelectedColor};
 }

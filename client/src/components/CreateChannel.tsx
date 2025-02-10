@@ -17,8 +17,10 @@ import { getAllContacts } from "@/api/contacts";
 import { useAppStore } from "@/store";
 import { Button } from "./ui/button";
 import MultipleSelector from "./ui/multipleselector";
+import { createChannel as apiCreateChannel } from "@/api/channel";
 
 export const CreateChannel = () => {
+  const {setSelectedChatType, setSelectedChatData, addChannel} = useAppStore();
   const [newChannelModal, setNewChannelModal] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
   const [allContacts, setAllContacts] = useState([]);
@@ -35,7 +37,11 @@ export const CreateChannel = () => {
   }, []);
 
   const createChannel = async () => {
-
+    const res = await apiCreateChannel(channelName, selectedContacts);
+    setChannelName("");
+    setSelectedContacts([]);
+    setNewChannelModal(false);
+    addChannel(res.channel);
 
   };
 

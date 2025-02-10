@@ -11,7 +11,13 @@ import { uploadMessageFile } from "@/api/messages";
 export const MessageBar = () => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { selectedChatType, selectedChatData, userInfo,  setIsUploadingFile, setFileUploadProgress } = useAppStore();
+  const {
+    selectedChatType,
+    selectedChatData,
+    userInfo,
+    setIsUploadingFile,
+    setFileUploadProgress,
+  } = useAppStore();
   const [message, setMessage] = useState<string>("");
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   const socket = useSocket();
@@ -37,7 +43,7 @@ export const MessageBar = () => {
   const handleSendMessage = async () => {
     if (selectedChatType === "contact") {
       if (userInfo?.id) {
-        socket.emit("sendMessage", {
+        socket?.emit("sendMessage", {
           sender: userInfo.id,
           messageContent: message,
           recipient: selectedChatData._id,
@@ -45,7 +51,16 @@ export const MessageBar = () => {
           fileUrl: undefined,
         });
       }
+    } else if (selectedChatType === "channel") {
+      socket?.emit("send-channel-message", {
+        sender: userInfo.id,
+        messageContent: message,
+        messageType: "text",
+        fileUrl: undefined,
+        channelId: selectedChatData._id,
+      });
     }
+    setMessage("");
     toast.success("Mensaje enviado");
   };
 
@@ -62,21 +77,27 @@ export const MessageBar = () => {
       if (!file) return;
       const formData = new FormData();
       formData.append("File", file);
-      setFileUploadProgress(0)
+      setFileUploadProgress(0);
       setIsUploadingFile(true);
       const res = await uploadMessageFile(formData);
       setIsUploadingFile(false);
       if (res.filePath) {
         if (selectedChatType === "contact") {
-          if (userInfo?.id) {
-            socket.emit("sendMessage", {
-              sender: userInfo.id,
-              messageContent: undefined,
-              recipient: selectedChatData._id,
-              messageType: "file",
-              fileUrl: res.filePath,
-            });
-          }
+          socket?.emit("sendMessage", {
+            sender: userInfo.id,
+            messageContent: undefined,
+            recipient: selectedChatData._id,
+            messageType: "file",
+            fileUrl: res.filePath,
+          });
+        } else if (selectedChatType === "channel") {
+          socket?.emit("send-channel-message", {
+            sender: userInfo.id,
+            messageContent: undefined,
+            messageType: "file",
+            fileUrl: res.filePath,
+            channelId: selectedChatData._id,
+          });
         }
       }
       console.log(res);

@@ -7,6 +7,8 @@ import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { downloadFile as downloadFiles } from "@/api/messages";
 import { IoCloseSharp } from "react-icons/io5";
+import { getColor } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export const MessageContainer = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -18,7 +20,7 @@ export const MessageContainer = () => {
     selectedChatData,
     userInfo,
     selectedChatMessages,
-    setSelectedChatMessages
+    setSelectedChatMessages,
   } = useAppStore();
 
   useEffect(() => {
@@ -30,7 +32,6 @@ export const MessageContainer = () => {
       if (setSelectedChatMessages) {
         setSelectedChatMessages(res);
       }
-      console.log("salida res:", res);
     };
     fetchMessages();
   }, [selectedChatData, selectedChatType]);
@@ -70,6 +71,7 @@ export const MessageContainer = () => {
             </div>
           )}
           {selectedChatType === "contact" && renderDMMessage(message)}
+          {selectedChatType === "channel" && renderChannelMessage(message)}
         </div>
       );
     });
@@ -149,6 +151,57 @@ export const MessageContainer = () => {
         <div className="text-xs text-gray-600">
           {moment(message.timestamp).format("LT")}
         </div>
+      </div>
+    );
+  };
+
+  const renderChannelMessage = (message) => {
+    console.log(message); 
+    return (
+      <div
+        className={`mt-5 ${
+          message.sender._id === userInfo.id ? "text-right" : "text-left"
+        }`}
+      >
+        
+          <div
+            className={`${
+              message.sender._id !== userInfo.id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {message.messageContent}
+          </div>
+   
+        {message.sender._id !== userInfo.id ? (
+          <div className="flex items-center justify-start gap-3">
+            <Avatar className="size-8 rounded-full overflow-hidden">
+              <AvatarImage
+                alt="Avatar profile"
+                src={`${HOST}/${message.sender?.Image}`}
+                className="object-cover h-full w-full bg-black rounded-full"
+              />
+              <AvatarFallback
+                className={`size-8 text-lg ${getColor(
+                  message.sender?.color || 0
+                )}`}
+              >
+                {message.sender.firstName
+                  ? message.sender?.firstName?.charAt(0)?.toUpperCase()
+                  : message.sender.email}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm text-white/60 ">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-xs text-white/60">
+              {moment(message.timestamp).format("LT")}
+            </span>
+          </div>
+        ) : (
+          <span className="text-xs text-white/60 mt-1">
+            {moment(message.timestamp).format("LT")}
+          </span>
+        )}
       </div>
     );
   };
