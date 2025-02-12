@@ -1,7 +1,7 @@
 import { useAppStore } from "@/store";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { getMessages } from "@/api/messages";
+import { getChannelMessages, getMessages } from "@/api/messages";
 import { HOST } from "@/utils/constantes";
 import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
@@ -9,6 +9,7 @@ import { downloadFile as downloadFiles } from "@/api/messages";
 import { IoCloseSharp } from "react-icons/io5";
 import { getColor } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
 
 export const MessageContainer = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -24,16 +25,21 @@ export const MessageContainer = () => {
   } = useAppStore();
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchContactMessages = async () => {
       if (!selectedChatData._id) return;
       if (selectedChatType !== "contact") return;
       const res = await getMessages(selectedChatData._id);
-
-      if (setSelectedChatMessages) {
         setSelectedChatMessages(res);
-      }
     };
-    fetchMessages();
+    const fetchChannelMessages = async () => {
+      const res = await getChannelMessages(selectedChatData._id);
+      setSelectedChatMessages(res);
+    };
+    if (selectedChatData._id){
+      if(selectedChatType==="contact")fetchContactMessages();
+      else if(selectedChatType==="channel")fetchChannelMessages();
+
+    }
   }, [selectedChatData, selectedChatType]);
 
   useEffect(() => {
@@ -163,7 +169,8 @@ export const MessageContainer = () => {
           message.sender._id === userInfo.id ? "text-right" : "text-left"
         }`}
       >
-        
+        {message.messageType === "text" && ( 
+
           <div
             className={`${
               message.sender._id !== userInfo.id
@@ -173,6 +180,45 @@ export const MessageContainer = () => {
           >
             {message.messageContent}
           </div>
+        )}
+            {message.messageType === "file" && (
+          <div
+            className={`${
+              message.sender !== selectedChatData._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {checkIfImage(message?.fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageUrl(message.fileUrl);
+                }}
+              >
+                <img
+                  src={`${HOST}/${message.fileUrl}`}
+                  height={250}
+                  width={250}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-4 ">
+                <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3 ">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split("/").pop()}</span>
+                <span
+                  className="bg-black/20 rounded-full p-3 text-xl hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => downloadFile(message.fileUrl)}
+                >
+                  <IoMdArrowRoundDown />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
    
         {message.sender._id !== userInfo.id ? (
           <div className="flex items-center justify-start gap-3">
@@ -193,14 +239,14 @@ export const MessageContainer = () => {
               </AvatarFallback>
             </Avatar>
             <span className="text-sm text-white/60 ">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
-            <span className="text-xs text-white/60">
+            <div className="text-xs text-white/60">
               {moment(message.timestamp).format("LT")}
-            </span>
+            </div>
           </div>
         ) : (
-          <span className="text-xs text-white/60 mt-1">
+          <div className="text-xs text-white/60 mt-1">
             {moment(message.timestamp).format("LT")}
-          </span>
+          </div>
         )}
       </div>
     );
@@ -216,7 +262,7 @@ export const MessageContainer = () => {
         >
           <div>
             <img
-              src={`${HOST}/${imageUrl}` || ""}
+              src={`${HOST}/${imageUrl}`}
               className="w-[90vh] h-auto bg-cover "
             />
           </div>

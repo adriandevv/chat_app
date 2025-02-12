@@ -1,5 +1,6 @@
 import {
   GET_ALL_MESSAGES_ROUTE,
+  GET_CHANNEL_MESSAGES_ROUTE,
   HOST,
   UPlOAD_FILE_ROUTE,
 } from "@/utils/constantes";
@@ -76,3 +77,24 @@ export const downloadFile = async (fileUrl: string) => {
     console.log(error);
   }
 };
+
+
+export const getChannelMessages = async (channelId : string) => 
+  {
+    try {
+      const response = await fetch(`${GET_CHANNEL_MESSAGES_ROUTE}/${channelId}`,{
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      const result = await response.json();
+      if(!response.ok){
+        throw new Error("Ocurrió un error desconocido");
+      }
+      return result.messages;
+    } catch (error) {
+      console.log(error);
+    }
+  };
