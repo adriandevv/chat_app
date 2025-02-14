@@ -16,6 +16,7 @@ export interface AuthSlice {
     fileUploadProgress: number;
     fileDownloadProgress: number;
     channels: any[];
+    addChannelInChannelList: (channel: any) => void;
     setChannels: (channels: any[]) => void;
     addChannel: (channel: any) => void;
     setIsUploadingFile: (isUploadingFile: boolean) => void;
@@ -28,7 +29,7 @@ export interface AuthSlice {
     closeChat: () => void;
     addMessage: (message: any) => void;
     setDirectMessagesContacts: (directMessagesContacts: any[]) => void;
-
+    addContactInDmContacts: (contact: any) => void;
 }
 
 export const useAppStore = create<AuthSlice>((set,get) => ({

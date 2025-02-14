@@ -20,7 +20,6 @@ const ContactList = ({ contacts, isChannel = false }) => {
     }
     setSelectedChatMessages([]);
   };
-  console.log("Contact list:",contacts);
 
   return (
     <div className="mt-5 ">
@@ -28,7 +27,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
         <div
           key={contact?._id}
           className={`flex items-center gap-4 pl-10 py-2 transition-all duration-300 cursor-pointer ${
-            selectedChatData && selectedChatData._id === contact._id
+            selectedChatData && selectedChatData?._id === contact?._id
               ? "bg-[#8417ff] hover:bg-[#8417ff]"
               : "hover:bg-[#f1f1f111]"
           }`}
@@ -39,19 +38,19 @@ const ContactList = ({ contacts, isChannel = false }) => {
               <Avatar className="size-11 rounded-full overflow-hidden">
                 <AvatarImage
                   alt="Avatar profile"
-                  src={`${HOST}/${contact.Image}`}
+                  src={`${HOST}/${contact?.Image}`}
                   className="object-cover h-full w-full bg-black rounded-full"
                 />
                 <AvatarFallback
                   className={`
                   ${
-                    selectedChatData && selectedChatData._id === contact._id
+                    selectedChatData && selectedChatData?._id === contact?._id
                       ? "bg-[#ffffff22] border border-white/70 "
-                      : getColor(contact.color || 0)
+                      : getColor(contact?.color || 0)
                   }
                     uppercase size-11 text-2xl `}
                 >
-                  {contact.firstName?.charAt(0)?.toUpperCase()}
+                  {contact?.firstName?.charAt(0)?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             )}

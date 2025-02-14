@@ -35,7 +35,7 @@ export const MessageContainer = () => {
       const res = await getChannelMessages(selectedChatData._id);
       setSelectedChatMessages(res);
     };
-    if (selectedChatData._id){
+    if (selectedChatData?._id){
       if(selectedChatType==="contact")fetchContactMessages();
       else if(selectedChatType==="channel")fetchChannelMessages();
 
@@ -162,7 +162,6 @@ export const MessageContainer = () => {
   };
 
   const renderChannelMessage = (message) => {
-    console.log(message); 
     return (
       <div
         className={`mt-5 ${

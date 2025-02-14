@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { HOST } from "@/utils/constantes";
 import { getColor } from "@/lib/utils";
 export const ChatHeader = () => {
-  const { closeChat, selectedChatData,selectedChatType } = useAppStore();
+  const { closeChat, selectedChatData, selectedChatType } = useAppStore();
   const handleClose = () => {
     if (closeChat) {
       closeChat();
@@ -15,7 +15,7 @@ export const ChatHeader = () => {
       <div className="flex gap-5 p-5 items-center justify-between w-full">
         <div className="flex gap-3 items-center justify-center">
           <div className="flex items-center gap-5 cursor-pointer">
-            {selectedChatType !=='contact' ? (
+            {selectedChatType !== "contact" ? (
               <div className="bg-[#ffffff22] size-10 flex items-center justify-center rounded-full">
                 #
               </div>
@@ -23,7 +23,7 @@ export const ChatHeader = () => {
               <Avatar className="h-12 w-12 rounded-full overflow-hidden">
                 <AvatarImage
                   alt="Avatar profile"
-                  src={`${HOST}/${selectedChatData.Image}`}
+                  src={`${HOST}/${selectedChatData?.Image}`}
                   className="object-cover h-full w-full bg-black rounded-full"
                 />
                 <AvatarFallback
@@ -31,19 +31,21 @@ export const ChatHeader = () => {
                     selectedChatData.color || 0
                   )}`}
                 >
-                  {selectedChatData.firstName?.charAt(0)?.toUpperCase() || "A"}
+                  {selectedChatData?.firstName?.charAt(0)?.toUpperCase() || "A"}
                 </AvatarFallback>
               </Avatar>
             )}
 
             <div className="flex flex-col">
-              {selectedChatType !=='contact' && <span>{selectedChatData?.name}</span>}
-              {selectedChatData.firstName ? (
+              {selectedChatType !== "contact" && (
+                <span>{selectedChatData?.name}</span>
+              )}
+              {selectedChatData?.firstName ? (
                 <span>
-                  {selectedChatData.firstName} {selectedChatData.lastName}
+                  {selectedChatData?.firstName} {selectedChatData.lastName}
                 </span>
               ) : (
-                <span className="text-xs">{selectedChatData.email}</span>
+                <span className="text-xs">{selectedChatData?.email}</span>
               )}
             </div>
           </div>

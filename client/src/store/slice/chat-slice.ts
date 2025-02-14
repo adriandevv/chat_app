@@ -8,6 +8,7 @@ interface ChatSlice {
   fileUploadProgress: number;
   fileDownloadProgress: number;
   channels: any[];
+  addChannelInChannelList: (channel: any) => void;
   setChannels: (channels: any[]) => void;
   setSelectedChatType: (selectedChatType: string | undefined) => void;
   setSelectedChatData: (selectedChatData: string) => void;
@@ -20,6 +21,7 @@ interface ChatSlice {
   setIsDownloadingFile: (isDownloadingFile: boolean) => void;
   setFileUploadProgress: (fileUploadProgress: number) => void;
   setFileDownloadProgress: (fileDownloadProgress: number) => void;
+  addContactInDmContacts: (message: any) => void;
 }
 
 export const createChatSlice = (
@@ -81,4 +83,34 @@ export const createChatSlice = (
       ],
     });
   },
+  addChannelInChannelList : (channel: any) => {
+    const channels = get().channels;
+    const data = channels.find((ch) => ch._id === channel.channelId);
+    const index = channels.findIndex((ch) => ch._id === channel.channelId);
+    if(index !==1 && index !== undefined){
+      channels.splice(index, 1);
+      channels.unshift(data);
+
+    }
+  },
+  addContactInDmContacts: (message) =>{
+    const userId = get().userInfo.id;
+    const setDirectMessagesContacts = get().setDirectMessagesContacts;
+    const fromId = message.sender._id === userId ? message.recipient._id : message.sender._id;
+    
+    const fromData = message.sender._id === userId ? message.recipient : message.sender;
+    const dmContacts = get().directMessagesContacts;
+    
+    const data = dmContacts.find((contact) => contact._id === fromId);
+
+    const index = dmContacts.findIndex((contact) => contact._id === fromId);
+    console.log("addContactInDmContacts",{data,index,dmContacts,userId,message,fromData});
+    if(index !==-1 && index !== undefined){
+      dmContacts.splice(index, 1);
+      dmContacts.unshift(data);
+    } else {
+      dmContacts.unshift(fromData);
+    }
+    setDirectMessagesContacts(dmContacts);
+  }
 });
