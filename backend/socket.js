@@ -69,12 +69,11 @@ export const setupSocket = (server) => {
           if (memberSocketId) {
             io.to(memberSocketId).emit("recieve-channel-message", finalData);
           }
-          const adminSocketId = userSocketMap.get(channel.admin._id.toString());
+        });
+        const adminSocketId = userSocketMap.get(channel.admin._id.toString());
           if (adminSocketId) {
             io.to(adminSocketId).emit("recieve-channel-message", finalData);
           }
-
-        });
       }
     };
 

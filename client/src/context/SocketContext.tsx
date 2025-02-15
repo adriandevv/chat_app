@@ -37,6 +37,7 @@ export const SocketProvider = ({
     const handleRecieveMessage = (message: any) => {
       const { selectedChatData, selectedChatType, addMessage,addContactInDmContacts } =
         useAppStore.getState();
+        console.log("selected chat data:",selectedChatData)
       if (
         (selectedChatType !== undefined &&
           selectedChatData._id === message.sender._id) ||
